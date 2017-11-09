@@ -75,10 +75,10 @@ export default {
           password: this.form.pass,
           role:this.form.role
         })
-        .then(function(response) {
-          console.log("success");          
+        .then((response)=> {
           console.log(response);
-          open();
+          console.log(this);
+          this.open2();
         })
         .catch(function(error) {
           console.log(error);
@@ -91,7 +91,24 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
-    }
+    },
+    open2() {
+        this.$confirm('是否自动跳转?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '正在跳转!'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消'
+          });          
+        });
+      }
   }
 };
 </script>

@@ -22,6 +22,12 @@
           <el-button type="primary" @click="onSubmit">登录</el-button>
           <el-button @click="reg">注册</el-button>
       </el-form-item>
+
+
+      <template>
+        <el-button :plain="true" :opensuc="opensuc" v-show="false"></el-button>
+        <el-button :plain="true" :openfal="openfal" v-show="false"></el-button>
+      </template>
       </el-form>
   </div>
 </div> 
@@ -37,49 +43,50 @@ export default {
         password: "",
         region: "",
         delivery: false,
-        type: []
+        type: [],
       }
     };
   },
   methods: {
     onSubmit() {
-      console.log("submit!");
       axios
         .post("/api/user/signIn", {
           username: this.form.name,
           password: this.form.password
         })
-        .then(function(response) {
-          // if (response.data.data.login) {
-          //   alert("登录成功");
-          // }
-          console.log("open");
-          open();
+        .then((response) => {
+          console.log(response)
+          if (response.data.data.login) {
+            this.opensuc();
+          }else{
+            this.openfal();
+          }
         })
         .catch(function(error) {
           console.log(error);
         });
     },
-    // open() {
-    //   this.$alert("<strong>这是 <i>HTML</i> 片段</strong>", "HTML 片段", {
-    //     dangerouslyUseHTMLString: true
-    //   });
-    // }
-    open() {
-      this.$alert("这是一段内容", "标题名称", {
-        confirmButtonText: "确定",
-        callback: action => {
-          this.$message({
-            type: "info",
-            message: `action: ${action}`
-          });
-        }
-      });
+    opensuc() {
+        this.$message({
+          message: '恭喜你，登录成功',
+          type: 'success',
+          center: true,
+          onClose: this.goods()
+        });
+    },
+    openfal(){
+        this.$message({
+          message: '账号或密码错误',
+          type: 'error',
+          center: true
+        });
+    },
+    goods(){
+      this.$router.push({path:'/goods'});
     },
     reg(){
-      console.log("begin reg");
       this.$router.push({path:'/reg'});
-    }
+    },
   }
 };
 </script>
