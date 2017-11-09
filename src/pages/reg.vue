@@ -28,6 +28,8 @@ export default {
     var checkName = (rule, value, callback) => {
         if (!value) {
           return callback(new Error('用户名不能为空'));
+        }else{
+          callback();
         }
       };
     var validatePass = (rule, value, callback) => {
@@ -53,7 +55,8 @@ export default {
       form: {
         pass: "",
         checkPass: "",
-        name: ""
+        name: "",
+        role:""
       },
       rules: {
         name: [{ validator: checkName, trigger: "blur" }],
@@ -66,7 +69,20 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          alert("submit!");
+          axios
+        .post("/api/user/signUp", {
+          username: this.form.name,
+          password: this.form.pass,
+          role:this.form.role
+        })
+        .then(function(response) {
+          console.log("success");          
+          console.log(response);
+          open();
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
         } else {
           console.log("error submit!!");
           return false;

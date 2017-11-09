@@ -3,11 +3,46 @@ const {
     getParameter
 } = require('../utils/utils.js')
 const bcrypt = require('bcrypt')
+//注册
+const signUp = function (req, res) {
+    const {
+        username,
+        password,
+        role
+    } = req.body;
+    User.findOne({
+            username
+        })
+        .then((user) => {
+            if (user) {
+                res.json(getParameter({
+                    success: false
+                }))
+            } else {
+                bcrypt.hash(password, 10)
+                    .then((password) => {
+                        const saveUser = new User({
+                            username,
+                            password,
+                            role
+                        });
+                        saveUser.save().then(() => {
+                            console.log("save begin");
+                            res.json(getParameter({
+                                success: true
+                            }));
+                        });
+                    });
+            }
+        });
+}
+//登录
 const signIn = function (req, res) {
     const {
         username,
         password
     } = req.body
+
     User.findOne({
             username
         })
@@ -34,6 +69,7 @@ const signIn = function (req, res) {
                     })
             }
         })
+
 }
 // 判断用户是否登录接口
 const isLogin = function (req, res) {
@@ -43,6 +79,7 @@ const isLogin = function (req, res) {
     }))
 }
 module.exports = {
-    signIn,
-    isLogin
+    signUp,
+    isLogin,
+    signIn
 };

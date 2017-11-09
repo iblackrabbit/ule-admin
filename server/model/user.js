@@ -10,12 +10,8 @@ const schema = new db.Schema({
     type: String,
     required: true
   },
-  email: {
+  role: {
     type: String
-  },
-  roles: {
-    type: String,
-    required: true
   }
 })
 
